@@ -12,32 +12,27 @@ app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', (req, res) => {
+  res.render('index');
+});
+
 app.get('/beers', (req, res) => {
   punkAPI
-      .getBeers()
-      .then(beersFromApi => {
-          res.render('beers', { beers: beersFromApi });
-      })
-      .catch(error => {
-          console.log(error);
-          res.send('An error occurred while fetching beers.');
-      });
-});
-
-app.get('/', (req, res) => {
-    res.render('index.hbs'); 
-});
-
-app.get('/beers', (req, res) => {
-    res.render('beers.hbs'); 
+    .getBeers()
+    .then(beersFromApi => {
+      // console.log(beersFromApi);
+      res.render('beers', { beers: beersFromApi });
+    })
+    .catch(error => console.log(error));
 });
 
 app.get('/random-beer', (req, res) => {
-  res.render('random-beer.hbs'); 
+  punkAPI
+    .getRandom()
+    .then(responseFromAPI => {
+      console.log(responseFromAPI);
+      res.render('random-beer', { randomBeer: responseFromAPI });
+    })
+    .catch(error => console.log(error));
 });
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
-{
-}
+app.listen(3000, () => console.log('ruuning on port 3000'));
